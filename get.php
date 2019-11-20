@@ -18,14 +18,13 @@ try {
     exit('DB Error:'.$e->getMessage());
 }
 
-
 //３．データ登録SQL作成
 $sql = "INSERT INTO posts (user, title, artist, innumber, comment, indate) VALUES (:user,:title,:artist,:innumber,:comment,sysdate())";
 $stmt = $pdo->prepare($sql);
 $stmt->bindValue(':user', $user, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
 $stmt->bindValue(':title', $title, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
 $stmt->bindValue(':artist', $artist, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
-$stmt->bindValue(':innumber', $innumber, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
+$stmt->bindValue(':innumber', $innumber, PDO::PARAM_INT);  //Integer（数値の場合 PDO::PARAM_INT)
 $stmt->bindValue(':comment', $comment, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
 $status = $stmt->execute(); //実行
 // var_dump("aaa");

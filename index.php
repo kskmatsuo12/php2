@@ -10,6 +10,7 @@ try {
 
 //２．データ登録SQL作成
 $sql = "SELECT * FROM music";
+
 $stmt = $pdo->prepare($sql);
 $status = $stmt->execute();
 
@@ -29,8 +30,11 @@ if ($status==false) {
         // $artist .= $r["artist"];
         // $innumber .= $r["innumber"];
         // $comment .= $r["comment"];
-        $music_name .= "<option value=".$r['music_name'].">".$r["music_name"]."</option>";
-        $artist_name .= "<option value=".$r['artist_name'].">".$r["artist_name"]."</option>";
+        $artist .= $r['artist_name'];
+        // $obj = ["music_name" => $r['music_name'], "artist_name" => $r['artist_name']];
+        // $music_name .= "<option value=".$obj.">".$r["music_name"]."</option>";
+        $music_name .= "<option name='".$r['id']."'value=".$r['music_name'].">".$r["music_name"]."</option>";
+        $artist_name .= "<option name='".$r['id']."'value=".$r['artist_name'].">".$r["artist_name"]."</option>";
 
         // $view .= "<tr><td>".$r["id"]."</td><td>".$r["name"]."</td></tr>";
         // $view .= "<tbody><tr><td scope='row'>".$r['indate']."</td><td>".$r['user']."</td><td>".$r['title']."</td><td>".$r['artist']."</td><td>".$r['innumber']."</td><td>".$r['comment']."</td></tr></tbody>";
@@ -56,26 +60,59 @@ if ($status==false) {
 </head>
 <body>
   <div class="container">
-  <?= include('header.php'); ?>
-  <?= $user ?>
+  <!-- <?= include('header.php'); ?> -->
+
     <h1>カラオケの点数を登録しよう！！！</h1>
-    <?= $artist_name ?>
-    <!-- <form action="get.php" method="POST"> -->
-    <!-- ユーザー名は最初のページからもってくる -->
-    <input type="text"id="user" name="user">
+    <a href="read.php">みんなの点数を見る</a>
+  
+    <!-- ユーザー名は最初のページからもってくる（時間ないからやめる。消さないようにする） -->
+    <span>ユーザー名:</span> 
+    <input type="text" id="user" name="user">
     
+
     <!-- 曲の登録部分 -->
+    <!-- Button trigger modal -->
     <div class="input-group mb-3">
-      <input id="music_name" name="music_name" type="text" class="form-control" placeholder="曲を新規で入力する際はこちら！" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
-      <input id="artist_name" name="artist_name" type="text" class="form-control" placeholder="歌手を新規で入力する際はこちら！" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">  
-    </div>
-      <div class="input-group mb-3">
-        <button id="send_music" type="button" class="btn btn-primary">曲名、歌手名を登録する</button>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        曲名・歌手名を登録する
+      </button>
+
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">曲のタイトルと歌手の登録画面</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="input-group mb-3">
+                <input id="music_name" name="music_name" type="text" class="form-control" placeholder="曲を新規で入力する際はこちら！" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"><br/>
+              </div>
+              <div class="input-group mb-3">
+                <input id="artist_name" name="artist_name" type="text" class="form-control" placeholder="歌手を新規で入力する際はこちら！" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">  
+              </div>
+              <div class="input-group mb-3">
+                <button id="send_music" data-dismiss="modal" type="button" class="btn btn-primary">曲名・歌手名を登録する</button>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    
+    <!-- 絞り込み -->
     <div class="input-group mb-3">
+      <span>曲名、絞り込み:</span>
+      <input type="text" id="user_list_search_men">
+    </div>
     <!-- 曲選択部分 -->
+    <div class="input-group mb-3">
       <div class="input-group-prepend">
         <span class="input-group-text" id="inputGroup-sizing-default">曲名</span>
         <select id="music_add" type="text" name=title class="custom-select">
@@ -87,9 +124,10 @@ if ($status==false) {
       <div class="input-group-prepend">
         <span class="input-group-text" id="inputGroup-sizing-default">歌手</span>
         <select id="artist_add" type="text" name="artist" class="custom-select">
-          <option id="artist_select" selected value="norequire">歌手を選ぶ</option>
+          <option id="artist_select" selected value="norequire">歌手を選ぶ</option>  
           <?= $artist_name ?>
         </select>
+        <!-- <input id="artist_name" value=""> -->
       </div>
     </div>
     
@@ -119,7 +157,7 @@ if ($status==false) {
 
 for (var i = 0; i < 300 ; i++) {
     let j = (0.1*i);
-    $('#number').append('<option value="' + (100-j) + '">' + (100-j) + '</option>');
+    $('#number').append('<option value="' + (1000-j) + '">' + (100-j) + '</option>');
  };
 
 
@@ -133,6 +171,11 @@ h1 {
   text-align: center;
   margin-top: 50px;
   margin-bottom: 100px;
+}
+
+button {
+  margin-top: 16px;
+  margin-bottom: 16px;
 }
 
 </style>

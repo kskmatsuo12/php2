@@ -1,4 +1,8 @@
 <?php
+//readからユーザー名を受け取ってWHEREに打ち込む
+$music = $_POST["get_music"];
+// $user = htmlspecialchars($_POST["get_user"]);
+
 //1.  DB接続します
 try {
     //Password:MAMP='root',XAMPP=''
@@ -8,7 +12,8 @@ try {
 }
 
 //２．データ登録SQL作成
-$sql = "SELECT * FROM posts LIMIT 100";
+$sql = "SELECT * FROM posts WHERE title LIKE '%$music%'";
+// $sql -> execute(array($user));
 $stmt = $pdo->prepare($sql);
 $status = $stmt->execute();
 
@@ -30,7 +35,7 @@ if ($status==false) {
         // $comment .= $r["comment"];
 
         // $view .= "<tr><td>".$r["id"]."</td><td>".$r["name"]."</td></tr>";
-        $view .= "<tbody><tr><td scope='row'>".$r['indate']."</td><td><form method='post' action='user.php'><input name='get_user' type='submit' value='".$r['user']."'></form></td><td><form method='post' action='category_music.php'><input name='get_music' type='submit' value='".$r['title']."'></form></td><td><form method='post' action='category_artist.php'><input type='submit' name='get_artist' value='".$r['artist']."'></form></td><td>".$r['innumber']*(1/10)."</td><td>".$r['comment']."</td></tr></tbody>";
+        $view .= "<tbody><tr><td scope='row'>".$r['indate']."</td><td>".$r['user']."</td><td>".$r['title']."</td><td>".$r['artist']."</td><td>".$r['innumber']*(1/10)."</td><td>".$r['comment']."</td></tr></tbody>";
     }
 };
 ?>
@@ -56,10 +61,6 @@ div {
     padding: 5px;
     background: #fff;
   }
-  input {
-    border: 0px;
-    color: blue;
-  }
 
 </style>
 </head>
@@ -69,6 +70,7 @@ div {
   <nav class="navbar navbar-default">
     <div class="container-fluid">
       <div class="navbar-header">
+      <h1>曲名：「<?= $music?>」の一覧</h1>
       <a class="navbar-brand" href="index.php">みんなのカラオケ点数</a>
       </div>
     </div>
@@ -91,14 +93,8 @@ div {
   </thead>
       <?= $view ?>
 </table>
-<form method="post"  action="user.php">
-<span>お名前DE検索ボックス</span>
-  <input class="form-control" name="get_user">
-  <button class="btn btn-outline-secondary" type="submit" id="button-addon1">名前で検索する</button>
-</form>
-    <!-- <div class="container jumbotron"><?=$user?></div> -->
 </div>
 <!-- Main[End] -->
-<script src="js/read.js" type="text/javascript"></script>
+
 </body>
 </html>
