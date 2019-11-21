@@ -4,6 +4,8 @@
 try {
     //Password:MAMP='root',XAMPP=''
     $pdo = new PDO('mysql:dbname=karaoke;charset=utf8;host=localhost', 'root', 'root');
+
+    // $pdo = new PDO('mysql:dbname=ksk-tennis_karaoke;charset=utf8;host=mysql743.db.sakura.ne.jp', 'ksk-tennis', 'yukitiindb11');
 } catch (PDOException $e) {
     exit('DB Connection Error'.$e->getMessage());
 }
