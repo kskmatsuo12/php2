@@ -1,4 +1,7 @@
 <?php
+session_start();
+$login_user = $_SESSION['login_user'];
+
 //1.  DB接続します
 try {
     //Password:MAMP='root',XAMPP=''
@@ -30,9 +33,12 @@ if ($status==false) {
         // $artist .= $r["artist"];
         // $innumber .= $r["innumber"];
         // $comment .= $r["comment"];
-
         // $view .= "<tr><td>".$r["id"]."</td><td>".$r["name"]."</td></tr>";
-        $view .= "<tbody><tr><td scope='row'>".$r['indate']."</td><td><form method='post' action='user.php'><input name='get_user' type='submit' value='".$r['user']."'></form></td><td><form method='post' action='category_music.php'><input name='get_music' type='submit' value='".$r['title']."'></form></td><td><form method='post' action='category_artist.php'><input type='submit' name='get_artist' value='".$r['artist']."'></form></td><td>".$r['innumber']*(1/10)."</td><td>".$r['comment']."</td></tr></tbody>";
+        if ($r["user"] == $login_user) {
+            $view .= "<tbody><tr><td scope='row'>".$r['indate']."</td><td><form method='post' action='user.php'><input name='get_user' type='submit' value='".$r['user']."'></form></td><td><form method='post' action='category_music.php'><input name='get_music' type='submit' value='".$r['title']."'></form></td><td><form method='post' action='category_artist.php'><input type='submit' name='get_artist' value='".$r['artist']."'></form></td><td>".$r['innumber']*(1/10)."</td><td>".$r['comment']."</td><td class='block'><a href='/delete.php?id=".$r["id"]."'>削除する</a><br/><a href='/update.php?id=".$r["id"]."'>編集する</a></td></tr></tbody>";
+        } else {
+            $view .= "<tbody><tr><td scope='row'>".$r['indate']."</td><td><form method='post' action='user.php'><input name='get_user' type='submit' value='".$r['user']."'></form></td><td><form method='post' action='category_music.php'><input name='get_music' type='submit' value='".$r['title']."'></form></td><td><form method='post' action='category_artist.php'><input type='submit' name='get_artist' value='".$r['artist']."'></form></td><td>".$r['innumber']*(1/10)."</td><td>".$r['comment']."</td><td></td></tr></tbody>";
+        }
     }
 };
 ?>
@@ -63,18 +69,17 @@ div {
     color: blue;
   }
 
+  .block{
+    display:block;
+  }
+
 </style>
 </head>
 <body id="main">
 <!-- Head[Start] -->
 <header>
-  <nav class="navbar navbar-default">
-    <div class="container-fluid">
-      <div class="navbar-header">
-      <a class="navbar-brand" href="index.php">みんなのカラオケ点数</a>
-      </div>
-    </div>
-  </nav>
+<?php include('header.php');?>
+
 </header>
 <!-- Head[End] -->
 
@@ -89,6 +94,7 @@ div {
       <th scope="col">アーティスト</th>
       <th scope="col">点数</th>
       <th scope="col">コメント</th>
+      <th scope="col">削除・編集</th>
     </tr>
   </thead>
       <?= $view ?>

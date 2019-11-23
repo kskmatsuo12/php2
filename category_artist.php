@@ -68,15 +68,7 @@ div {
 </head>
 <body id="main">
 <!-- Head[Start] -->
-<header>
-  <nav class="navbar navbar-default">
-    <div class="container-fluid">
-      <div class="navbar-header">
-      <a class="navbar-brand" href="index.php">みんなのカラオケ点数</a>
-      </div>
-    </div>
-  </nav>
-</header>
+<?php include('header.php')?>
 <!-- Head[End] -->
 
 <!-- Main[Start] -->

@@ -69,14 +69,7 @@ div {
 <body id="main">
 <!-- Head[Start] -->
 <header>
-  <nav class="navbar navbar-default">
-    <div class="container-fluid">
-      <div class="navbar-header">
-      <h1>曲名：「<?= $music?>」の一覧</h1>
-      <a class="navbar-brand" href="index.php">みんなのカラオケ点数</a>
-      </div>
-    </div>
-  </nav>
+ <?php include('header.php'); ?>
 </header>
 <!-- Head[End] -->
 
