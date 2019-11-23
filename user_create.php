@@ -1,3 +1,5 @@
+<!-- ユーザー登録ページ -->
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>

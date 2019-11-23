@@ -1,18 +1,17 @@
 <?php
+//headerとしてほぼ全ての表示されるページでしよう
+//「前のページが自分のサーバーであるかどうか」
+//「セッションユーザーがちゃんとあるか」を検証して弾いてる。
+//つまりログインしてない人が直接URLクリックしても入れない
+//たった７行。
+
 $maePage = $_SERVER['HTTP_REFERER'];
-// echo $_SERVER['HTTP_REFERER'];
 $host = $_SERVER['HTTP_HOST'];
-// echo $maePage;
-// echo $host;
 session_start();
 $login_user = $_SESSION['login_user'];
-// echo $_SESSION['login_user'];
 if ($login_user==null or strpos($maePage, $host)===false) {
     header('Location: /php2');
 }
-
-// strpos($subject, 'bc') !== false
-// echo strpos($maePage, $host)==true;
 
 ?>
 

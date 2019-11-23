@@ -1,11 +1,11 @@
 <?php
+//マイページで表示されるやつ
+//ユーザーテーブルからセッションユーザーと同じユーザー名を取得して
+//最初からvalueに入れておいて、idと一緒に更新用のchange_user.phpに飛ばす
 
 include('session.php');
 
-// echo $_SESSION['login_user'];
-//1.  DB接続します
 try {
-    //Password:MAMP='root',XAMPP=''
     $pdo = new PDO('mysql:dbname=karaoke;charset=utf8;host=localhost', 'root', 'root');
 
     // $pdo = new PDO('mysql:dbname=ksk-tennis_karaoke;charset=utf8;host=mysql743.db.sakura.ne.jp', 'ksk-tennis', 'yukitiindb11');
@@ -28,9 +28,6 @@ if ($status==false) {
     $r = $stmt->fetch();
     $userpassword = $r["userpassword"];
     $id = $r["id"];
-    // echo $r["username"];
-    // exit();
-    //終了のおまじない
 };
 
 ?>

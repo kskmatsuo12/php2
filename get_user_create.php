@@ -1,4 +1,6 @@
 <?php
+//ユーザーを作るページ
+
 $user_name = $_POST["user_name"];
 $user_password = $_POST["user_password"];
 $user_favorite_music = $_POST["user_favorite_music"];

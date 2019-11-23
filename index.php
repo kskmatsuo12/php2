@@ -14,6 +14,7 @@
 <div class="container">
   <div class="center">
     <h1>カラオケ得点、登録したくないですか？</h1>
+    <button id="register" class="btn btn-primary">ユーザー登録する</button>
     <form method="post" action="login.php">
       <input placeholder="name" type="text" name="login_user"/><br>
       <input placeholder="password" type="password" name="login_password"/><br>
@@ -21,6 +22,15 @@
     </form>
   </div>
 </div>
+
+<script>
+//ユーザー登録画面に飛ぶためだけのやつ
+$("#register").on("click",function(){
+  location.href="user_create.php";
+})
+
+</script>
+
 </body>
 
 <style>
@@ -36,6 +46,10 @@ h1{
 input {
   margin: 16px;
   text-align: center;
+}
+
+form{
+  margin-top: 50px;
 }
 </style>
 </html>

@@ -1,11 +1,12 @@
 <?php
-// echo $_SERVER['HTTP_REFERER'];
+//このページはindexから入ってこないと弾かれるようになっている
+//一番最初のif文で弾いてる
+//どうしてhostとhttpを定義するかは、桜サーバーでもローカルサーバーでも同じコードで済む
 
-$host = $_SERVER['HTTP_HOST'];
+$host = $_SERVER['HTTP_HOST']; //host名を受信
+$http = (empty($_SERVER["HTTPS"]) ? "http://" : "https://"); //https: or http
 
-$http = (empty($_SERVER["HTTPS"]) ? "http://" : "https://");
-
-if ($_SERVER['HTTP_REFERER'] != $host + $http + 'php2') {
+if ($_SERVER['HTTP_REFERER'] != $host + $http + 'php2') { //左で「前のページのURL」右で「URLを指定」これが一致すれば処理をするという意味。
     echo '失敗！';
 } else {
     $login_user = $_POST["login_user"];
@@ -28,9 +29,6 @@ if ($_SERVER['HTTP_REFERER'] != $host + $http + 'php2') {
 
 //４．データ登録処理後
     if ($status==false) {
-        //SQL実行時にエラーがある場合（エラーオブジェクト取得して表示）
-        // $error = $stmt->errorInfo();
-        // exit("SQL Error:".$error[2]);
         echo 'ユーザーが存在しません';
         head('Location: /php2');
     } else {

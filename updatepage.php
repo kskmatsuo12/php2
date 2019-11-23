@@ -1,40 +1,23 @@
 <?php
-//カラオケの点数を登録するページ
-//ミュージックのテーブルから曲名と歌手を受け取ってセレクトに一覧して表示
-//AJAXを使って、モーダルから歌手と曲名を追加できてそれがセレクトに追加される。
-//AJAXで点数もPOSTしてる。
-//index.jsと連携
 
-try {
-    //Password:MAMP='root',XAMPP=''
-    $pdo = new PDO('mysql:dbname=karaoke;charset=utf8;host=localhost', 'root', 'root');
+//一覧から編集をクリックすると飛んでくるページ。
 
-    // $pdo = new PDO('mysql:dbname=ksk-tennis_karaoke;charset=utf8;host=mysql743.db.sakura.ne.jp', 'ksk-tennis', 'yukitiindb11');
-} catch (PDOException $e) {
-    exit('DB Connection Error'.$e->getMessage());
+
+$id = $_GET["id"];
+$user = $_GET["user"];
+$title = $_GET["title"];
+$artist = $_GET["artist"];
+$innumber = $_GET["innumber"];
+$comment = $_GET["comment"];
+
+session_start();
+$login_user = $_SESSION['login_user'];
+
+if ($user !== $login_user) {
+    header('Location: /php2');
 }
-
-//２．データ登録SQL作成
-$sql = "SELECT * FROM music";
-
-$stmt = $pdo->prepare($sql);
-$status = $stmt->execute();
-
-//３．データ表示
-$view="";
-if ($status==false) {
-    $error = $stmt->errorInfo();
-    exit("SQLerror:".$error[2]);
-} else {
-    while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $artist .= $r['artist_name'];
-        $music_name .= "<option name='".$r['id']."'value=".$r['music_name'].">".$r["music_name"]."</option>";
-        $artist_name .= "<option name='".$r['id']."'value=".$r['artist_name'].">".$r["artist_name"]."</option>";
-    }
-};
-
-
 ?>
+
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -42,22 +25,21 @@ if ($status==false) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>カラオケ点数登録アプリ</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>投稿の更新</title><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </head>
 <body>
-  <?php include('header.php');?>
+    <?php include('header.php');?>
   <div class="container">
-    <h1>カラオケの点数を登録しよう！！！</h1>
-    <a href="read.php">みんなの点数を見る</a>
+    <form method="post" name="form" action="update.php">
+    <h1>投稿の更新</h1>
   
     <!-- ユーザー名は最初のページからもってくる（時間ないからやめる。消さないようにする） -->
     <span>ユーザー名:</span> 
-    <input disabled type="text" id="user" name="user" value="<?= $login_user ?>">
-    
+    <input type="text" id="user" name="user_name" value="<?= $user ?>">
+    <input type="hidden" value="<?= $id ?>" name="id">
     <!-- 曲の登録部分 -->
     <!-- Button trigger modal -->
     <div class="input-group mb-3">
@@ -104,7 +86,8 @@ if ($status==false) {
       <div class="input-group-prepend">
         <span class="input-group-text" id="inputGroup-sizing-default">曲名</span>
         <select id="music_add" type="text" name=title class="custom-select">
-          <option id="music_select" selected value="norequire">曲を選ぶ</option>
+          <option id="music_select" value="norequire">曲を選ぶ</option>
+          <option id="music_select" selected value="<?= $title ?>"><?= $title ?></option>
           <?= $music_name ?>
         </select>
       </div>
@@ -112,7 +95,8 @@ if ($status==false) {
       <div class="input-group-prepend">
         <span class="input-group-text" id="inputGroup-sizing-default">歌手</span>
         <select id="artist_add" type="text" name="artist" class="custom-select">
-          <option id="artist_select" selected value="norequire">歌手を選ぶ</option>  
+          <option id="artist_select" value="norequire">歌手を選ぶ</option>
+          <option id="artist_select" selected value="<?= $artist ?>"><?= $artist ?></option>  
           <?= $artist_name ?>
         </select>
         <!-- <input id="artist_name" value=""> -->
@@ -123,7 +107,7 @@ if ($status==false) {
     <div class="input-group mb-3">
       <div class="input-group-prepend">
         <select name="innumber" id="number" class="custom-select">
-          <option id="number_select" selected value="norequire">点数</option>
+          <option id="number_select" selected value="<?= $innumber/10 ?>"><?= $innumber/10 ?></option>
         </select>
         <span class="text-danger">70点未満は心のどこかにしまっておきましょう</span>
       </div>
@@ -134,12 +118,13 @@ if ($status==false) {
       <div class="input-group-prepend">
         <span class="input-group-text" id="inputGroup-sizing-default">コメント</span>
       </div>
-      <input id="comment" name="comment" placeholder="何か一言あれば(なしでもok）" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+      <input id="comment" value="<?= $comment ?>" name="comment" placeholder="何か一言あれば(なしでもok）" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
     </div>
     <!-- <input type="submit" value="送信"> -->
  
+    </form>
   <!-- </form> -->
-    <button id="send">送信</button>
+  <button id="send">送信</button>
   </div><!-- container閉じ   -->
 <script>
 
@@ -148,29 +133,14 @@ for (var i = 0; i < 300 ; i++) {
     $('#number').append('<option value="' + (1000-j) + '">' + (100-j) + '</option>');
  };
 
-
+$("#send").on("click",function(){
+    if (confirm("更新して良いですか？")) {
+        document.form.submit();
+    }else {
+        console.log('a');
+    }
+});
 
 </script>
-<script src="js/index.js" type="text/javascript"></script>
 </body>
-
-<style>
-h1 {
-  text-align: center;
-  margin-top: 50px;
-  margin-bottom: 100px;
-}
-
-button {
-  margin-top: 16px;
-  margin-bottom: 16px;
-}
-
-#user {
-  color: blue;
-  background-color: #fff;
-  border: none;
-}
-
-</style>
 </html>

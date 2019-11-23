@@ -1,3 +1,5 @@
+<!-- パスワードが違ってたときに少しだけ表示するファイル -->
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>

@@ -1,7 +1,6 @@
 <?php
+//使ってないファイルですごめんなさい
 //1. POSTデータ取得
-//$name = filter_input( INPUT_GET, ","name" ); //こういうのもあるよ
-//$email = filter_input( INPUT_POST, "email" ); //こういうのもあるよ
 $artist_name = $_POST["artist_name"];
 
 //2. DB接続します

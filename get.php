@@ -1,7 +1,7 @@
 <?php
-//1. POSTデータ取得
-//$name = filter_input( INPUT_GET, ","name" ); //こういうのもあるよ
-//$email = filter_input( INPUT_POST, "email" ); //こういうのもあるよ
+//投稿のAJAXを受け取るページ！！！
+//授業の通りだと思う。
+
 $user = $_POST["user"];
 $title = $_POST["title"];
 $artist = $_POST["artist"];

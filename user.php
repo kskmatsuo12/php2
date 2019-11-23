@@ -1,14 +1,13 @@
 <?php
-//readからユーザー名を受け取ってWHEREに打ち込む
+//ユーザーを検索して表示されるページ
+//検索のinputから＄userを取得
+
 $user = $_POST["get_user"];
-// $user = htmlspecialchars($_POST["get_user"]);
 
 //1.  DB接続します
 try {
     //Password:MAMP='root',XAMPP=''
     $pdo = new PDO('mysql:dbname=karaoke;charset=utf8;host=localhost', 'root', 'root');
-
-    // $pdo = new PDO('mysql:dbname=ksk-tennis_karaoke;charset=utf8;host=mysql743.db.sakura.ne.jp', 'ksk-tennis', 'yukitiindb11');
 } catch (PDOException $e) {
     exit('DB Connection Error'.$e->getMessage());
 }
@@ -22,21 +21,10 @@ $status = $stmt->execute();
 //３．データ表示
 $view="";
 if ($status==false) {
-    //execute（SQL実行時にエラーがある場合）
     $error = $stmt->errorInfo();
     exit("SQLerror:".$error[2]);
 } else {
-    //Selectデータの数だけ自動でループしてくれる
-    //FETCH_ASSOC=http://php.net/manual/ja/pdostatement.fetch.php
     while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        //$r["id"],$r["name"],$r["email"],$r["naiyou"]
-        // $user .= $r["user"];
-        // $title .= $r["title"];
-        // $artist .= $r["artist"];
-        // $innumber .= $r["innumber"];
-        // $comment .= $r["comment"];
-
-        // $view .= "<tr><td>".$r["id"]."</td><td>".$r["name"]."</td></tr>";
         $view .= "<tbody><tr><td scope='row'>".$r['indate']."</td><td>".$r['user']."</td><td>".$r['title']."</td><td>".$r['artist']."</td><td>".$r['innumber']*(1/10)."</td><td>".$r['comment']."</td></tr></tbody>";
     }
 };
